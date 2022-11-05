@@ -1,9 +1,25 @@
+:root {
+  --border-color: black;
+}
+
 body {
   height: 100vh;
+  font-family: 'Catamaran', sans-serif;
+}
+
+h1, h2 {
+  font-weight: 800;
 }
 
 #content {
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.weather {
   display: flex;
   justify-content: center;
   align-items: center;
