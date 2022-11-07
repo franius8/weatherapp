@@ -7,8 +7,7 @@ const weatherGetter = (() => {
   const fetchWeatherData = async (location:string) =>{
     const coordinates = await geoCoder.getCoordinates(location);
     const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${coordinates[0]}&lon=${coordinates[1]}&APPID=${apiKey}`);
-    const data = await response.json() as Data;
-    return data;
+    return await response.json() as Data;
   }
   
   const transformWeatherData = async (data:Data, location:string) => {
@@ -21,11 +20,16 @@ const weatherGetter = (() => {
 
   const getWeatherData = async (location: string) => {
     const weatherData = await fetchWeatherData(location);
-    const transformedWeatherData = await transformWeatherData(weatherData, location);
-    return transformedWeatherData;
+    return await transformWeatherData(weatherData, location);
   }
 
-  return { getWeatherData };
+  const getWeatherDataFromCoords = async (coords: number[]) => {
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${coords[0]}&lon=${coords[1]}&APPID=${apiKey}`);
+    const data = await response.json() as Data;
+    return await transformWeatherData(data, data.name);
+  }
+
+  return { getWeatherData, getWeatherDataFromCoords };
 })();
 
 export default weatherGetter;

@@ -56,3 +56,17 @@ interface Data {
     icon: string,
     location: string
   }
+
+  interface Position {
+    coords: {
+        latitude: number,
+        longitude: number
+    }
+  }
+
+  interface Cities {
+    name: string,
+      country: string,
+      lat: number,
+      lon: number,
+  }

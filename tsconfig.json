@@ -2,6 +2,11 @@
     "compilerOptions": {
         "noImplicitAny": true,
         "target": "ES5",
-        "module": "ES2015"
+        "module": "ES2015",
+        "lib": [
+        "es2019",
+        "dom",
+        "dom.iterable"
+      ],
     }
 }
