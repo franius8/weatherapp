@@ -11,11 +11,12 @@ const weatherGetter = (() => {
   }
   
   const transformWeatherData = async (data:Data, location:string) => {
+    const country:string = data.sys.country;
     const weather:string = data.weather[0].main;
     const temp:number = unitConverter.convertTempKtoC(data.main.temp);
     const realTemp:number = unitConverter.convertTempKtoC(data.main.feels_like);
     const icon:string = data.weather[0].icon;
-    return {location:location, weather:weather, temp:temp, realTemp:realTemp, icon:icon};
+    return {location:location, country:country, weather:weather, temp:temp, realTemp:realTemp, icon:icon};
   }
 
   const getWeatherData = async (location: string) => {

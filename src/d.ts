@@ -54,7 +54,8 @@ interface Data {
     temp: number,
     realTemp: number,
     icon: string,
-    location: string
+    location: string,
+    country: string
   }
 
   interface Position {

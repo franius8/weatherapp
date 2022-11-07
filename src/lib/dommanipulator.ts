@@ -4,11 +4,20 @@ import weatherGetter from "./weathergetter";
 const domManipulator = (() => {
   const content = document.querySelector('#content');
 
+  const buildHeader = () => {
+    const header = document.querySelector('header')
+    const title = document.createElement('h1');
+    title.textContent = 'Weather App';
+    header.appendChild(title);
+  }
+
   const clearContent = () => {
     content.innerHTML = '';
   }
 
   const buildStarterForm = () => {
+    buildHeader();
+    content.setAttribute('id', 'content');
     const form = document.createElement('form');
     form.setAttribute('id', 'starter-form');
     form.addEventListener('submit', (e) => formHandler.handleStarterForm(e));
@@ -39,6 +48,8 @@ const domManipulator = (() => {
   const buildCityChoiceForm = (cities: Cities[] ) => {
     console.log(cities);
     clearContent();
+    const heading = document.createElement('h2');
+    heading.textContent = 'Choose a city';
     const form = document.createElement('form');
     form.setAttribute('id', 'city-choice-form');
     const radioContainer = document.createElement('div');
@@ -49,16 +60,21 @@ const domManipulator = (() => {
       input.setAttribute('type', 'radio');
       input.setAttribute('name', 'city');
       input.setAttribute('value', city.lat.toString());
+      input.setAttribute('id', city.lat.toString());
       const label = document.createElement('label');
+      label.setAttribute('for', city.lat.toString());
       label.textContent = city.name + ', ' + city.country;
       radioContainer.appendChild(input);
       radioContainer.appendChild(label);
+      label.addEventListener('click', () => {console.log('clicked')});
     });
     const submit = document.createElement('button');
     submit.setAttribute('type', 'submit');
     submit.textContent = 'Choose city';
+    form.addEventListener('submit', (e) => {formHandler.cityChoiceFormHandler(e, cities)});
     form.appendChild(radioContainer);
     form.appendChild(submit);
+    content.appendChild(heading);
     content.appendChild(form);
     }
 
@@ -76,7 +92,7 @@ const domManipulator = (() => {
   const displayWeather = (data: TransformedWeatherData) => {
     clearContent();
     const weatherHeading = document.createElement('h2');
-    weatherHeading.textContent = `Current weather in ${data.location}`;
+    weatherHeading.textContent = `Current weather in ${data.location}, ${data.country}`;
     const weatherDiv = document.createElement('div');
     weatherDiv.classList.add('weather');
     const weatherIcon:HTMLDivElement = document.createElement('div');
@@ -84,7 +100,7 @@ const domManipulator = (() => {
     const weatherInfoDiv:HTMLDivElement = document.createElement('div');
     weatherInfoDiv.classList.add('weather-info');
     weatherInfoDiv.innerHTML = `<p>Weather: ${data.weather}</p><p>Temp: ${data.temp}&#176;C</p><p>Feels like: ${data.realTemp}&#176;C</p>`;
-    weatherIcon.innerHTML = `<img alt="Weather" src="http://openweathermap.org/img/wn/${data.icon}@2x.png" />`;
+    weatherIcon.innerHTML = `<img alt="Weather" src="https://openweathermap.org/img/wn/${data.icon}@2x.png" />`;
     content.appendChild(weatherHeading);
     weatherDiv.appendChild(weatherIcon);
     weatherDiv.appendChild(weatherInfoDiv);

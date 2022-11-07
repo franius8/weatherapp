@@ -12,15 +12,16 @@ const formHandler = (() => {
     const cities = await geocoder.getCitiesList(location);
     domManipulator.buildCityChoiceForm(cities);
     }
-const cityChoiceFormHandler = async (e:SubmitEvent, cities: Cities[]) => {
+
+    const cityChoiceFormHandler = async (e:SubmitEvent, cities: Cities[]) => {
     e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData);
-    const city = cities.find((city) => city.lat.toString() === data.city);
-    const coords = [city.lat, city.lon];
-    const weatherData = await weatherGetter.getWeatherDataFromCoords(coords);
-    domManipulator.displayWeather(weatherData);
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+        const city = cities.find((city) => city.lat.toString() === data.city);
+        const coords = [city.lat, city.lon];
+        const weatherData = await weatherGetter.getWeatherDataFromCoords(coords);
+        domManipulator.displayWeather(weatherData);
   }
   return { handleStarterForm, cityChoiceFormHandler };
 })();
