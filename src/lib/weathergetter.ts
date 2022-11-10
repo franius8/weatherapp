@@ -16,7 +16,17 @@ const weatherGetter = (() => {
     const temp:number = unitConverter.convertTempKtoC(data.main.temp);
     const realTemp:number = unitConverter.convertTempKtoC(data.main.feels_like);
     const icon:string = data.weather[0].icon;
-    return {location:location, country:country, weather:weather, temp:temp, realTemp:realTemp, icon:icon};
+    const pressure:number = data.main.pressure;
+    const humidity:number = data.main.humidity;
+    return {
+      location:location,
+      country:country,
+      weather:weather, temp:temp,
+      realTemp:realTemp,
+      icon:icon,
+      pressure:pressure,
+      humidity:humidity
+    };
   }
 
   const getWeatherData = async (location: string) => {

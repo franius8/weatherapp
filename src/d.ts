@@ -55,7 +55,9 @@ interface Data {
     realTemp: number,
     icon: string,
     location: string,
-    country: string
+    country: string,
+      pressure: number,
+      humidity: number
   }
 
   interface Position {

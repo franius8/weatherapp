@@ -5,19 +5,27 @@ const domManipulator = (() => {
   const content = document.querySelector('#content');
 
   const buildHeader = () => {
-    const header = document.querySelector('header')
+    const header = document.querySelector('header');
+    const img = document.createElement('img');
+    img.src = 'https://openweathermap.org/img/wn/02d@2x.png';
+    img.alt = '';
     const title = document.createElement('h1');
     title.textContent = 'Weather App';
+    header.appendChild(img);
     header.appendChild(title);
-  }
+    header.addEventListener('click', () => {
+      buildStarterForm()
+    });
+    }
 
   const clearContent = () => {
     content.innerHTML = '';
   }
 
   const buildStarterForm = () => {
-    buildHeader();
-    content.setAttribute('id', 'content');
+    clearContent();
+    const starterDiv = document.createElement('div');
+    starterDiv.id = 'starter';
     const form = document.createElement('form');
     form.setAttribute('id', 'starter-form');
     form.addEventListener('submit', (e) => formHandler.handleStarterForm(e));
@@ -41,12 +49,12 @@ const domManipulator = (() => {
       });
     form.appendChild(input);
     form.appendChild(submit);
-    content.appendChild(form);
-    content.appendChild(currentLocationButton);
+    starterDiv.appendChild(form);
+    starterDiv.appendChild(currentLocationButton);
+    content.appendChild(starterDiv);
   }
 
   const buildCityChoiceForm = (cities: Cities[] ) => {
-    console.log(cities);
     clearContent();
     const heading = document.createElement('h2');
     heading.textContent = 'Choose a city';
@@ -83,7 +91,6 @@ const domManipulator = (() => {
     resetButton.setAttribute('type', 'button');
     resetButton.textContent = 'Select another city';
     resetButton.addEventListener('click', () => {
-      clearContent();
       buildStarterForm();
     });
     return resetButton;
@@ -99,7 +106,9 @@ const domManipulator = (() => {
     weatherIcon.classList.add('weather-icon');
     const weatherInfoDiv:HTMLDivElement = document.createElement('div');
     weatherInfoDiv.classList.add('weather-info');
-    weatherInfoDiv.innerHTML = `<p>Weather: ${data.weather}</p><p>Temp: ${data.temp}&#176;C</p><p>Feels like: ${data.realTemp}&#176;C</p>`;
+    weatherInfoDiv.appendChild(displayWeatherDescription(data.weather));
+    weatherInfoDiv.appendChild(displayTemperature(data.temp, data.realTemp));
+    weatherInfoDiv.appendChild(displayPressure(data.pressure));
     weatherIcon.innerHTML = `<img alt="Weather" src="https://openweathermap.org/img/wn/${data.icon}@2x.png" />`;
     content.appendChild(weatherHeading);
     weatherDiv.appendChild(weatherIcon);
@@ -107,7 +116,40 @@ const domManipulator = (() => {
     content.appendChild(weatherDiv);
     content.appendChild(createResetButton());
   }
-  return {displayWeather, buildStarterForm, buildCityChoiceForm};
+
+  const displayWeatherDescription = (description: string) => {
+    const descriptionDiv = document.createElement('div');
+    descriptionDiv.classList.add('weather-description');
+    descriptionDiv.innerHTML = `Weather: <br><span class="monospace">${description}</span>`;
+    return descriptionDiv
+  }
+
+  const displayTemperature = (temperature: number, realTemperature: number) => {
+    const outerTempDiv = document.createElement('div');
+    outerTempDiv.classList.add('outer-temp-div');
+    const tempDiv:HTMLDivElement = document.createElement('div');
+    tempDiv.classList.add('temp');
+    tempDiv.innerHTML = `Temp: <br><span class="monospace">${temperature}&#176;C</span>`;
+    const realTempDiv:HTMLDivElement = document.createElement('div');
+    realTempDiv.classList.add('real-temp');
+    realTempDiv.innerHTML = `Feels like: <br><span class="monospace">${realTemperature}&#176;C</span>`;
+    outerTempDiv.appendChild(tempDiv);
+    outerTempDiv.appendChild(realTempDiv);
+    return outerTempDiv;
+  }
+
+  const displayPressure = (pressure: number) => {
+    const pressureDiv = document.createElement('div');
+    pressureDiv.classList.add('pressure');
+    pressureDiv.innerHTML = `Pressure: <br><span class="monospace">${pressure} hPa</span>`;
+    return pressureDiv;
+  }
+
+  const buildHomePage = () => {
+    buildHeader();
+    buildStarterForm()
+  }
+  return {displayWeather, buildStarterForm, buildCityChoiceForm, buildHomePage};
 })();
 
 export default domManipulator;
